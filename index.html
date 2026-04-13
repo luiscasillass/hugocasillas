@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hugo Casillas González</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  :root {
+    --bg: #0f0e0c;
+    --surface: #181714;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.18);
+    --text-primary: #f0ece4;
+    --text-secondary: #8a8480;
+    --text-tertiary: #4a4744;
+    --accent: #c8a96e;
+    --accent-dim: rgba(200,169,110,0.12);
+    --radius: 14px;
+  }
+ 
+  html, body {
+    min-height: 100vh;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    padding: 2rem 1rem;
+  }
+ 
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% -10%, rgba(200,169,110,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 80% 100%, rgba(200,169,110,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+ 
+  .card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    animation: fadeUp 0.6s ease both;
+  }
+ 
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+ 
+  /* ── Language toggle ── */
+  .lang-toggle {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.1rem;
+    display: flex;
+    background: rgba(255,255,255,0.05);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    padding: 3px;
+    z-index: 10;
+    gap: 2px;
+  }
+ 
+  .lang-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    color: var(--text-tertiary);
+  }
+ 
+  .lang-btn.active {
+    background: var(--accent);
+    color: #0f0e0c;
+  }
+ 
+  /* ── Header ── */
+  .header {
+    padding: 2.5rem 2rem 1.75rem;
+    border-bottom: 0.5px solid var(--border);
+    position: relative;
+  }
+ 
+  .initials {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 0.5px solid var(--border-hover);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    background: var(--accent-dim);
+  }
+ 
+  .initials span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+ 
+  .name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+    margin-bottom: 5px;
+  }
+ 
+  .role {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+ 
+  .industry {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+ 
+  /* ── Contact rows ── */
+  .contacts {
+    padding: 0.5rem 0;
+  }
+ 
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 2rem;
+    border-bottom: 0.5px solid var(--border);
+    text-decoration: none;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+ 
+  .contact-row:last-child { border-bottom: none; }
+ 
+  .contact-row:hover {
+    background: rgba(255,255,255,0.03);
+  }
+ 
+  .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--accent-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+ 
+  .icon svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+ 
+  .contact-info { flex: 1; min-width: 0; }
+ 
+  .contact-label {
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 2px;
+  }
+ 
+  .contact-value {
+    font-size: 13.5px;
+    color: var(--text-primary);
+    font-weight: 300;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+ 
+  .arrow {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+ 
+  .arrow svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--text-tertiary);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+ 
+  /* ── Save button ── */
+  .footer {
+    padding: 1.25rem 2rem 1.5rem;
+  }
+ 
+  .save-btn {
+    width: 100%;
+    padding: 13px;
+    background: var(--accent);
+    color: #0f0e0c;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+ 
+  .save-btn:hover  { opacity: 0.9; }
+  .save-btn:active { transform: scale(0.98); }
+ 
+  .save-btn svg {
+    width: 15px;
+    height: 15px;
+    stroke: #0f0e0c;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+ 
+  .tagline {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 1rem;
+    letter-spacing: 0.3px;
+  }
+ 
+  /* ── Location chip ── */
+  .location-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    padding: 4px 10px 4px 8px;
+    background: rgba(255,255,255,0.04);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+  }
+ 
+  .location-chip svg {
+    width: 11px;
+    height: 11px;
+    stroke: var(--text-tertiary);
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+ 
+  .location-chip span {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+</style>
+</head>
+<body>
+ 
+<div class="card">
+ 
+  <!-- Language toggle -->
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" id="btn-es" onclick="setLang('es')">ES</button>
+  </div>
+ 
+  <!-- Header -->
+  <div class="header">
+    <div class="initials"><span>HCG</span></div>
+    <p class="name">Hugo Casillas González</p>
+    <p class="role">CEO</p>
+    <p class="industry" id="txt-industry">Fresh Produce &amp; Food Export</p>
+    <div class="location-chip">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      <span>Jalisco, México</span>
+    </div>
+  </div>
+ 
+  <!-- Contact rows -->
+  <div class="contacts">
+ 
+    <a class="contact-row" href="tel:+523781270425">
+      <div class="icon">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11.5a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .84h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </div>
+      <div class="contact-info">
+        <p class="contact-label" id="lbl-phone">Phone</p>
+        <p class="contact-value">+52 378 127 0425</p>
+      </div>
+      <div class="arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </a>
+ 
+    <a class="contact-row" href="https://wa.me/523781270425">
+      <div class="icon">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+      </div>
+      <div class="contact-info">
+        <p class="contact-label">WhatsApp</p>
+        <p class="contact-value">+52 378 127 0425</p>
+      </div>
+      <div class="arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </a>
+ 
+    <a class="contact-row" href="mailto:hugo@casillas.com">
+      <div class="icon">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div class="contact-info">
+        <p class="contact-label">Email</p>
+        <p class="contact-value">hugo@casillas.com</p>
+      </div>
+      <div class="arrow"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </a>
+ 
+  </div>
+ 
+  <!-- Save contact -->
+  <div class="footer">
+    <button class="save-btn" onclick="saveContact()">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span id="btn-save">Save Contact</span>
+    </button>
+    <p class="tagline" id="txt-tagline">Fresh Produce · Export · México</p>
+  </div>
+ 
+</div>
+ 
+<script>
+const strings = {
+  en: {
+    industry:  'Fresh Produce &amp; Food Export',
+    phone:     'Phone',
+    save:      'Save Contact',
+    tagline:   'Fresh Produce · Export · México'
+  },
+  es: {
+    industry:  'Exportación de Alimentos y Verduras Frescas',
+    phone:     'Teléfono',
+    save:      'Guardar Contacto',
+    tagline:   'Verduras Frescas · Exportación · México'
+  }
+};
+ 
+function setLang(lang) {
+  const s = strings[lang];
+  document.getElementById('txt-industry').innerHTML = s.industry;
+  document.getElementById('lbl-phone').textContent   = s.phone;
+  document.getElementById('btn-save').textContent    = s.save;
+  document.getElementById('txt-tagline').textContent = s.tagline;
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+  document.documentElement.lang = lang;
+}
+ 
+function saveContact() {
+  const vcard =
+`BEGIN:VCARD
+VERSION:3.0
+FN:Hugo Casillas González
+N:Casillas González;Hugo;;;
+TITLE:CEO
+ORG:Casillas
+TEL;TYPE=CELL:+523781270425
+EMAIL:hugo@casillas.com
+ADR;TYPE=WORK:;;Jalisco;México
+NOTE:Fresh Produce & Food Export
+END:VCARD`;
+ 
+  const blob = new Blob([vcard], { type: 'text/vcard' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'hugo-casillas.vcf';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
+ 
